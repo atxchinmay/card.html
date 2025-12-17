@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Chinmay | Digital Visiting Card</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
+    integrity="sha512-DTOQO9RWCH3ppGqcWaEA1BIZOC6xxalwEsw9c2QQeAIftl+Vegovlnee1c9QX4TctnWMn13TZye+giMm8e2LwA=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+  <style>
+    :root {
+      --accent1: #22d3ee;
+      --accent2: #a855f7;
+      --accent3: #22c55e;
+      --text-main: #e5e7eb;
+      --text-dim: #9ca3af;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background:
+        radial-gradient(circle at top left, #0ea5e9 0, transparent 55%),
+        radial-gradient(circle at bottom right, #a855f7 0, #020617 55%);
+      font-family: "Poppins", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-main);
+      overflow: hidden;
+    }
+
+    .particle {
+      position: fixed;
+      width: 4px;
+      height: 4px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.7);
+      box-shadow: 0 0 12px rgba(148, 163, 184, 0.9);
+      animation: floatUp 14s linear infinite;
+      opacity: 0.7;
+      z-index: 0;
+    }
+    .particle:nth-child(1) { left: 10%; animation-delay: 0s; }
+    .particle:nth-child(2) { left: 30%; animation-delay: 3s; }
+    .particle:nth-child(3) { left: 55%; animation-delay: 6s; }
+    .particle:nth-child(4) { left: 75%; animation-delay: 9s; }
+    .particle:nth-child(5) { left: 90%; animation-delay: 12s; }
+
+    @keyframes floatUp {
+      0%   { transform: translateY(110vh); }
+      100% { transform: translateY(-10vh); }
+    }
+
+    .scene {
+      perspective: 1200px;
+      width: min(440px, 96vw);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      position: relative;
+      width: 100%;
+      border-radius: 24px;
+      background: linear-gradient(135deg, rgba(15,23,42,0.75), rgba(15,23,42,0.95));
+      border: 1px solid rgba(148,163,184,0.35);
+      box-shadow:
+        0 28px 80px rgba(15,23,42,0.95),
+        0 0 0 1px rgba(15,23,42,0.9);
+      padding: 20px 22px 18px;
+      transform-style: preserve-3d;
+      transform: rotateX(14deg) rotateY(-18deg);
+      transition:
+        transform 0.25s ease-out,
+        box-shadow 0.25s ease-out,
+        border-color 0.25s ease-out,
+        background 0.3s ease-out;
+      cursor: pointer;
+      backdrop-filter: blur(22px);
+      overflow: hidden;
+    }
+
+    .card:hover {
+      transform: rotateX(0deg) rotateY(0deg) translateY(-6px) scale(1.04);
+      box-shadow:
+        0 36px 90px rgba(15,23,42,0.98),
+        0 0 32px rgba(56,189,248,0.5);
+      border-color: rgba(56,189,248,0.7);
+      background: radial-gradient(circle at top left,
+        rgba(56,189,248,0.18),
+        rgba(15,23,42,0.96));
+    }
+
+    .border-glow {
+      position: absolute;
+      inset: -2px;
+      border-radius: inherit;
+      background: conic-gradient(
+        from 200deg,
+        rgba(56,189,248,0) 0deg,
+        rgba(56,189,248,0.95) 70deg,
+        rgba(168,85,247,0.95) 150deg,
+        rgba(34,197,94,0.9) 220deg,
+        rgba(56,189,248,0) 320deg
+      );
+      filter: blur(14px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease-out;
+      z-index: -1;
+    }
+    .card:hover .border-glow {
+      opacity: 1;
+      animation: spin 3.4s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .card-inner {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      column-gap: 16px;
+      row-gap: 10px;
+      transform-style: preserve-3d;
+    }
+
+    .avatar-wrap {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      border-radius: 999px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: translateZ(26px);
+    }
+    .avatar-ring {
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: conic-gradient(
+        from 220deg,
+        #22d3ee,
+        #a855f7,
+        #22c55e,
+        #22d3ee
+      );
+      filter: blur(2px);
+      opacity: 0.95;
+      animation: glowRing 5s linear infinite;
+    }
+    @keyframes glowRing { to { transform: rotate(360deg); } }
+
+    .avatar-core {
+      position: relative;
+      width: 70px;
+      height: 70px;
+      border-radius: inherit;
+      background: radial-gradient(circle at 30% 30%, #22d3ee, #020617 70%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #e5e7eb;
+      font-weight: 700;
+      font-size: 1.6rem;
+      letter-spacing: 0.06em;
+      text-shadow: 0 4px 14px rgba(15,23,42,0.9);
+      box-shadow:
+        0 0 0 3px rgba(15,23,42,1),
+        0 16px 30px rgba(15,23,42,0.95);
+    }
+
+    .info { transform: translateZ(22px); }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.85);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      font-size: 0.65rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-dim);
+      margin-bottom: 4px;
+    }
+    .badge-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: radial-gradient(circle, #22c55e, #15803d);
+      box-shadow: 0 0 10px rgba(34,197,94,0.9);
+    }
+
+    .name {
+      font-size: 1.24rem;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      margin-bottom: 2px;
+    }
+
+    .title {
+      font-size: 0.8rem;
+      color: var(--text-dim);
+      margin-bottom: 10px;
+    }
+
+    .meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px 10px;
+      font-size: 0.7rem;
+      color: #9ca3af;
+      margin-bottom: 12px;
+    }
+    .meta span {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.95);
+      border: 1px solid rgba(55,65,81,0.95);
+    }
+    .meta i {
+      font-size: 0.75rem;
+      color: var(--accent1);
+    }
+
+    .footer-row {
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      transform: translateZ(18px);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 10px;
+    }
+    .social-icons a {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 30% 30%, #1f2937, #020617);
+      border: 1px solid rgba(148,163,184,0.7);
+      color: #e5e7eb;
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition:
+        transform 0.2s ease-out,
+        box-shadow 0.2s ease-out,
+        border-color 0.2s ease-out,
+        background 0.2s ease-out;
+    }
+    .social-icons a:hover {
+      transform: translateY(-2px) scale(1.05);
+      border-color: var(--accent1);
+      box-shadow: 0 8px 18px rgba(15,23,42,0.95),
+                  0 0 18px rgba(56,189,248,0.55);
+      background: radial-gradient(circle at 30% 30%, #22d3ee, #0f172a);
+    }
+    .social-icons a.linkedin:hover  { background: radial-gradient(circle at 30% 30%, #0a66c2, #020617); }
+    .social-icons a.instagram:hover { background: radial-gradient(circle at 30% 30%, #f97316, #db2777); }
+    .social-icons a.x:hover         { background: radial-gradient(circle at 30% 30%, #ffffff, #020617); color:#020617; }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      font-size: 0.7rem;
+    }
+    .btn {
+      border-radius: 999px;
+      padding: 4px 10px;
+      border: 1px solid rgba(148,163,184,0.7);
+      background: rgba(15,23,42,0.96);
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.7rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition:
+        background 0.2s ease-out,
+        border-color 0.2s ease-out,
+        transform 0.2s ease-out,
+        box-shadow 0.2s ease-out;
+    }
+    .btn i { font-size: 0.8rem; color: var(--accent2); }
+    .btn:hover {
+      background: radial-gradient(circle at 30% 30%, #22d3ee, #020617);
+      border-color: var(--accent1);
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(15,23,42,0.95),
+                  0 0 18px rgba(56,189,248,0.45);
+    }
+
+    @media (max-width: 520px) {
+      .scene { width: 94vw; }
+      .card { transform: rotateX(10deg) rotateY(-12deg); }
+      .card-inner {
+        grid-template-columns: 1fr;
+        row-gap: 10px;
+      }
+      .footer-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+  <div class="particle"></div>
+
+  <div class="scene">
+    <div class="card" id="card">
+      <div class="border-glow"></div>
+
+      <div class="card-inner">
+        <div class="avatar-wrap">
+          <div class="avatar-ring"></div>
+          <div class="avatar-core">CP</div>
+        </div>
+
+        <div class="info">
+          <div class="badge">
+            <span class="badge-dot"></span>
+            AVAILABLE FOR COLLABS
+          </div>
+          <div class="name">Chinmay R Marishetty</div>
+
+          <!-- UPDATED ROLE TEXT -->
+          <div class="title">Motivational Speaker · Thinker · Developer · Creator</div>
+
+          <div class="meta">
+            <!-- UPDATED LOCATION -->
+            <span><i class="fa-solid fa-location-dot"></i>Manipal, Udupi</span>
+            <span><i class="fa-solid fa-code"></i>HTML · C++ · R</span>
+            <span><i class="fa-regular fa-envelope"></i>cgujaran777@gmail.com</span>
+          </div>
+
+          <div class="footer-row">
+            <div class="social-icons">
+              <a class="linkedin"
+                 href="https://www.linkedin.com/in/chinmay-p-r-564370207"
+                 target="_blank"
+                 aria-label="LinkedIn">
+                <i class="fa-brands fa-linkedin-in"></i>
+              </a>
+
+              <a class="instagram"
+                 href="https://instagram.com/atx.chinmay"
+                 target="_blank"
+                 aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+              </a>
+
+              <a class="x"
+                 href="https://x.com/atxchinmay"
+                 target="_blank"
+                 aria-label="X (Twitter)">
+                <i class="fa-brands fa-x-twitter"></i>
+              </a>
+            </div>
+
+            <div class="actions">
+              <a href="mailto:cgujaran777@gmail.com" class="btn">
+                <i class="fa-regular fa-envelope"></i> Email
+              </a>
+              <button class="btn" id="vcard-btn" type="button">
+                <i class="fa-regular fa-address-card"></i> Save contact
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const card = document.getElementById("card");
+    const scene = document.querySelector(".scene");
+
+    scene.addEventListener("mousemove", (e) => {
+      const rect = scene.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      const centerX = rect.width / 2;
+      const centerY = rect.height / 2;
+
+      const rotateX = ((y - centerY) / centerY) * -10;
+      const rotateY = ((x - centerX) / centerX) * 14;
+
+      card.style.transform =
+        `rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px) scale(1.04)`;
+    });
+
+    scene.addEventListener("mouseleave", () => {
+      card.style.transform = "rotateX(14deg) rotateY(-18deg)";
+    });
+
+    // vCard (unchanged, still no phone)
+    const vcardBtn = document.getElementById("vcard-btn");
+    vcardBtn.addEventListener("click", () => {
+      const vcardData = `
+BEGIN:VCARD
+VERSION:3.0
+N:Chinmay;R Marishetty;;;
+FN:Chinmay R Marishetty
+TITLE:Motivational Speaker · Thinker · Developer · Creator
+EMAIL;TYPE=INTERNET,HOME,PREF:cgujaran777@gmail.com
+URL:https://www.linkedin.com/in/chinmay-p-r-564370207
+END:VCARD
+`.trim();
+
+      const blob = new Blob([vcardData], { type: "text/vcard" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "Chinmay-contact.vcf";
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
